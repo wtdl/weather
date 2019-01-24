@@ -1,7 +1,6 @@
 {
     "name": "wtdl/weather",
     "description": "天气预报接",
-    "type": "library",
     "license": "Apache-2.0",
     "authors": [
         {
