@@ -10,7 +10,6 @@
             "homepage": "https://www.szwtdl.cn"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
         "hanson/vbot": "^2.0"
     },
