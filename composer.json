@@ -1,0 +1,25 @@
+{
+    "name": "wtdl/weather",
+    "description": "天气预报接",
+    "type": "library",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "pengjian",
+            "email": "szpengjian@gmail.com",
+            "homepage": "https://www.szwtdl.cn"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "hanson/vbot": "^2.0"
+    },
+    "require-dev": {
+        "hanson/vbot": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Wtdl\\Weather\\": "src/"
+        }
+    }
+}
