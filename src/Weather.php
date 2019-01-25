@@ -18,7 +18,7 @@ class Weather extends AbstractMessageHandler
 
     public $author = 'pengjian';
 
-    public $name = 'GroupMessage';
+    public $name = 'Weather';
 
     public $zhName = '未来5天气预报';
 
@@ -26,12 +26,18 @@ class Weather extends AbstractMessageHandler
 
     public function register()
     {
-
+        $default_config = [
+            'group_list' => array(
+                '相亲相爱一家人',
+                '大逗比'
+            )
+        ];
+        $this->config = array_merge($default_config, $this->config ?? []);
     }
 
     public function handler(Collection $message)
     {
-        if ($message['type'] === 'text' && $message['from']['NickName'] == '相亲相爱一家人' && $this->queryWeaher($message['content'])) {
+        if ($message['type'] === 'text' && in_array($message['from']['NickName'],$this->config['group_list']) && $this->queryWeaher($message['content'])) {
             return Text::send($message['from']['UserName'], $this->queryWeaher($message['content']));
         }
     }
