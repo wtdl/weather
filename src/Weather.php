@@ -11,6 +11,7 @@ namespace Wtdl\Weather;
 use Hanson\Vbot\Extension\AbstractMessageHandler;
 use Hanson\Vbot\Message\Text;
 use Illuminate\Support\Collection;
+use Predis\Client;
 
 class Weather extends AbstractMessageHandler
 {
@@ -24,15 +25,29 @@ class Weather extends AbstractMessageHandler
 
     public $version = '1.0';
 
+    public $redis = null;
+
+    const Group = 'group_list';
+
     public function register()
     {
         $default_config = [
+            'database' => [
+                'status' => true,
+                'host' => "127.0.0.1",
+                'user' => '',
+                'pass' => '',
+                'port' => 6379
+            ],
             'group_list' => array(
                 '相亲相爱一家人',
                 '大逗比'
             )
         ];
         $this->config = array_merge($default_config, $this->config ?? []);
+        if ($this->config['database']['status']){
+            $this->redis = new Client('tcp://'.$this->config['database']['host'].":".$this->config['database']['port']);
+        }
     }
 
     public function handler(Collection $message)
@@ -40,6 +55,16 @@ class Weather extends AbstractMessageHandler
         if ($message['type'] === 'text' && in_array($message['from']['NickName'],$this->config['group_list']) && $this->queryWeaher($message['content'])) {
             return Text::send($message['from']['UserName'], $this->queryWeaher($message['content']));
         }
+    }
+
+
+    public function getGroupList(){
+        if ($this->config['database']['status']){
+            $data = $this->redis->getset(self::Group,$this->config['group_list']);
+            var_dump($data);
+            return json_decode($data,true);
+        }
+        return $this->config['group_list'];
     }
 
     public function queryWeaher($name){
